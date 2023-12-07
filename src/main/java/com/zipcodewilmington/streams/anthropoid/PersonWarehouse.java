@@ -63,8 +63,7 @@ public final class PersonWarehouse implements Iterable<Person> {
      */ //TODO
     public Stream<Person> getUniquelyNamedPeopleStartingWith(Character character) {
 
-        return people.stream().collect(Collectors.groupingBy(Person::getName, LinkedHashMap::new, Collectors.toList()))
-                .values().stream().map(p -> p.get(0)).filter(p->p.getName().charAt(0) == character);
+        return getUniquelyNamedPeople().filter(p->p.getName().charAt(0) == character);
     }
 
     /**
