@@ -4,10 +4,8 @@ import com.zipcodewilmington.streams.tools.ReflectionUtils;
 import com.zipcodewilmington.streams.tools.logging.LoggerHandler;
 import com.zipcodewilmington.streams.tools.logging.LoggerWarehouse;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,7 +34,8 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return list of names of Person objects
      */ // TODO
     public List<String> getNames() {
-        return null;
+
+        return people.stream().map(Person::getName).collect(Collectors.toList());
     }
 
 
@@ -44,7 +43,17 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return list of uniquely named Person objects
      */ //TODO
     public Stream<Person> getUniquelyNamedPeople() {
-        return null;
+        List<String> names = getNames().stream().distinct().collect(Collectors.toList());
+        // maybe use lambda -louie
+        // FIRST OCCURRENCE OF A NAME, NOT PEOPLE WITH UNIQUE NAMES
+        //Map<String,List<Person>> map = people.stream().collect(Collectors.groupingBy(Person::getName));
+        // the names are getting out of order, I think it's bc I'm making it a map, so order is different.
+        // find a way to do this in a list?
+        //List<Person> list = people.stream().collect(Collectors.groupingBy(Person::getName)).values().stream().map(p -> p.get(0)).collect(Collectors.toList());
+
+        // LINKEDHASHMAP TO PRESERVE ORDER, COLLECTORS.TOLIST FOR 3RD ARG BC MAP WE WANT IS <STRING, LIST<PERSON>>
+        return people.stream().collect(Collectors.groupingBy(Person::getName, LinkedHashMap::new, Collectors.toList())).values().stream().map(p -> p.get(0));
+       // return people.stream().filter(p -> names.contains(p.getName())).;
     }
 
 
@@ -53,7 +62,9 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return a Stream of respective
      */ //TODO
     public Stream<Person> getUniquelyNamedPeopleStartingWith(Character character) {
-        return null;
+
+        return people.stream().collect(Collectors.groupingBy(Person::getName, LinkedHashMap::new, Collectors.toList()))
+                .values().stream().map(p -> p.get(0)).filter(p->p.getName().charAt(0) == character);
     }
 
     /**
@@ -61,7 +72,8 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return a Stream of respective
      */ //TODO
     public Stream<Person> getFirstNUniquelyNamedPeople(int n) {
-        return null;
+
+        return getUniquelyNamedPeople().limit(n);
     }
 
     /**
@@ -84,6 +96,7 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return Stream of all Aliases
      */ // TODO
     public Stream<String> getAllAliases() {
+
         return null;
     }
 
