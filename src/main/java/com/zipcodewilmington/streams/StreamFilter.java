@@ -88,6 +88,7 @@ public class StreamFilter {
      */ //TODO
     public Person[] toArrayOneLine() {
         //Person[] persons = this.personStream.toArray(Person[]::new);
+        // REMEMBER THIS, REMEMBER THIS, REMEMBER THIS .TOARRAY THING
         return personStream.filter(p -> p.getName().charAt(0) == this.startingCharacter.charAt(0)).toArray(Person[]::new);
     }
 
