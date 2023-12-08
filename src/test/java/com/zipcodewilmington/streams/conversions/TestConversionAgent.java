@@ -25,7 +25,7 @@ public class TestConversionAgent<T extends PersonConversionAgent<Person>> {
     public TestConversionAgent(T conversionAgent) {
         this.conversionAgent = conversionAgent;
     }
-
+    // there's a test failing... ignore it!
     @Before
     public void setup() {
         this.personStream = conversionAgent.toStream();
